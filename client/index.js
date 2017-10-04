@@ -1,5 +1,6 @@
 const mapboxgl = require('mapbox-gl');
 const buildMarker = require('./marker.js');
+const fetch = require('./fetch');
 
 mapboxgl.accessToken = 'pk.eyJ1Ijoic2l4eHRhIiwiYSI6ImNqOGMzNXYwczA1MDUyeHJsaHk4empoankifQ.totkL8Moz5WvblnyxSZm6g'
 

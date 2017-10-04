@@ -1,18 +1,17 @@
 const express = require('express');
 const router = express.Router();
-const { db, Place, Activity, Restaurant, Hotel } = require('./models/')
+const { Activity, Hotel, Restaurant } = require('./models')
 
-router.get('/', (req, res, next) => {
-  console.log('it\'s going to the router')
+router.get('/activities', function(req, res){
+  Activity.findAll({}).then(result => res.json(result));
+});
 
-  Promise.all(
-    [Hotel.findAll({ include: [Place]}),
-    Activity.findAll({ include: [Place]}),
-    Restaurant.findAll({ include: [ Place]})])
-  .then(function(result) {
-    res.json(result)
-  })
-  .catch(next)
+router.get('/hotels', function(req, res){
+  Hotel.findAll({}).then(result => res.json(result));
+});
 
-})
+router.get('/restaurants', function(req, res){
+  Restaurant.findAll({}).then(result => res.json(result));
+});
+
 module.exports = router;
