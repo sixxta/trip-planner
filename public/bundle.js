@@ -60,40 +60,113 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 32);
+/******/ 	return __webpack_require__(__webpack_require__.s = 0);
 /******/ })
 /************************************************************************/
-/******/ ({
+/******/ ([
+/* 0 */
+/***/ (function(module, exports, __webpack_require__) {
 
-/***/ 1:
-/***/ (function(module, exports) {
+const mapboxgl = __webpack_require__(1);
+const buildMarker = __webpack_require__(2);
+const fetch = __webpack_require__(4);
 
-var g;
+mapboxgl.accessToken = 'pk.eyJ1Ijoic2l4eHRhIiwiYSI6ImNqOGMzNXYwczA1MDUyeHJsaHk4empoankifQ.totkL8Moz5WvblnyxSZm6g'
 
-// This works in non-strict mode
-g = (function() {
-	return this;
-})();
+const map = new mapboxgl.Map({
+  container: 'map',
+  center: [-74.009, 40.705], // FullStack coordinates
+  zoom: 12, // starting zoom
+  style: 'mapbox://styles/mapbox/dark-v9' // mapbox has lots of different map styles available.
+});
 
-try {
-	// This works if eval is allowed (see CSP)
-	g = g || Function("return this")() || (1,eval)("this");
-} catch(e) {
-	// This works if the window reference is available
-	if(typeof window === "object")
-		g = window;
-}
+const marker = buildMarker('activities', [-74.009, 40.705]);
+marker.addTo(map);
 
-// g can still be undefined, but nothing to do about it...
-// We return undefined, instead of nothing here, so it's
-// easier to handle this case. if(!global) { ...}
+document.getElementById(`hotels-add`).addEventListener('click',
+function() {
+  var select = document.getElementById('hotels-choices');
+  let list = document.createElement("LI");
+  list.innerText = select.value;
+  document.getElementById('hotels-list').appendChild(list);
+  const button = document.createElement('button');
+  button.setAttribute('class', 'btn');
+  button.innerHTML = 'X';
+  list.append(button);
+  button.onclick = function (){
+    document.getElementById('hotels-list').removeChild(list)
+  };
+  fetch('/api/hotels/' + select.value)
+  .then(response => {
+    return response.json()})
+  .then(result => {
+    console.log(result);
+    buildMarker('hotels', result).addTo(map)})
+  .catch()
 
-module.exports = g;
+})
+
+// document.getElementById(`restaurants-add`).addEventListener('click',
+// function() {
+//   var select = document.getElementById('restaurants-choices');
+//   let list = document.createElement("LI");
+//   list.innerText = select.value;
+//   document.getElementById('restaurants-list').appendChild(list);
+//   const button = document.createElement('button');
+//   button.setAttribute('class', 'btn');
+//   button.innerHTML = 'X';
+//   list.append(button);
+//   button.onclick = function (){
+//     document.getElementById('restaurants-list').removeChild(list)
+//     // fetch('/api/hotels/' + select.value)
+//     // .then(response => {
+//     //   return response.json()})
+//     // .then(result => {
+//     //   mapId.remove()})
+//   };
+//   fetch('/api/restaurants/' + select.value)
+//   .then(response => {
+//     return response.json()})
+//   .then(result => {
+//     console.log(result);
+//     buildMarker('restaurants', result).addTo(map)})
+//   .catch()
+
+// })
+
+// document.getElementById(`activities-add`).addEventListener('click',
+// function() {
+//   var select = document.getElementById('activities-choices');
+//   let list = document.createElement("LI");
+//   list.innerText = select.value;
+//   document.getElementById('activities-list').appendChild(list);
+//   const button = document.createElement('button');
+//   button.setAttribute('class', 'btn');
+//   button.innerHTML = 'X';
+//   list.append(button);
+//   button.onclick = function (){
+//     document.getElementById('activities-list').removeChild(list)
+//     // fetch('/api/activities/' + select.value)
+//     // .then(response =>{
+//     //   return response.json()})
+//     // .then(result =>{
+//     //   mapId.remove()})
+//   };
+//   fetch('/api/activities/' + select.value)
+//   .then(response => {
+//     return response.json()})
+//   .then(result => {
+//     console.log(result);
+//     buildMarker('activities', result).addTo(map)})
+//   .catch()
+
+// })
+
+module.exports = { map, marker, mapboxgl };
 
 
 /***/ }),
-
-/***/ 17:
+/* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {var require;var require;(function(f){if(true){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.mapboxgl = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return require(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(_dereq_,module,exports){
@@ -557,36 +630,13 @@ module.exports={"$version":8,"$root":{"version":{"required":true,"type":"enum","
 
 
 //# sourceMappingURL=mapbox-gl.js.map
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ }),
-
-/***/ 32:
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const mapboxgl = __webpack_require__(17);
-const buildMarker = __webpack_require__(33);
-const fetch = __webpack_require__(92);
-
-mapboxgl.accessToken = 'pk.eyJ1Ijoic2l4eHRhIiwiYSI6ImNqOGMzNXYwczA1MDUyeHJsaHk4empoankifQ.totkL8Moz5WvblnyxSZm6g'
-
-const map = new mapboxgl.Map({
-  container: 'map',
-  center: [-74.009, 40.705], // FullStack coordinates
-  zoom: 12, // starting zoom
-  style: 'mapbox://styles/mapbox/dark-v9' // mapbox has lots of different map styles available.
-});
-
-const marker = buildMarker('activities', [-74.009, 40.705]);
-marker.addTo(map);
-
-
-/***/ }),
-
-/***/ 33:
-/***/ (function(module, exports, __webpack_require__) {
-
-const { Marker } = __webpack_require__(17);
+const { Marker } = __webpack_require__(1);
 
 const iconURLs = {
   hotels: 'http://i.imgur.com/D9574Cu.png',
@@ -610,11 +660,50 @@ module.exports = buildMarker;
 
 
 /***/ }),
+/* 3 */
+/***/ (function(module, exports) {
 
-/***/ 92:
+var g;
+
+// This works in non-strict mode
+g = (function() {
+	return this;
+})();
+
+try {
+	// This works if eval is allowed (see CSP)
+	g = g || Function("return this")() || (1,eval)("this");
+} catch(e) {
+	// This works if the window reference is available
+	if(typeof window === "object")
+		g = window;
+}
+
+// g can still be undefined, but nothing to do about it...
+// We return undefined, instead of nothing here, so it's
+// easier to handle this case. if(!global) { ...}
+
+module.exports = g;
+
+
+/***/ }),
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const buildMarker = __webpack_require__(33);
+const buildMarker = __webpack_require__(2);
+const { map } = __webpack_require__(0)
+
+// const typeArray = ['activities', 'hotels', 'restaurants'];
+
+// typeArray.forEach(function(type){
+//   fetch('/api/' + type)
+//   .then((response) => {return response.json()})
+//   .then(data => {var options = document.getElementById(type + '-choices');
+//   data.forEach((d) => {
+//     options.appendChild(new Option(d.name, d.name));
+// })})
+// .catch(console.error);
+// })
 
 const fetchActivities = fetch('/api/activities')
 .then((response) => {return response.json()})
@@ -635,26 +724,35 @@ const fetchHotels = fetch('/api/hotels')
 const fetchRestaurants = fetch('/api/restaurants')
 .then((response) => {return response.json()})
 .then(data => {var options = document.getElementById('restaurants-choices');
-data.forEach((d) => {
-  options.appendChild(new Option(d.name, d.name));
+  data.forEach((d) => {
+    options.appendChild(new Option(d.name, d.name));
 })})
 .catch(console.error);
 
+// document.getElementById(`hotels-add`).addEventListener('click',
+// function() {
+//   var select = document.getElementById('hotels-choices');
+//   let list = document.createElement("LI");
+//   list.innerText = select.value;
+//   document.getElementById('hotels-list').appendChild(list);
+//   const button = document.createElement('button');
+//   button.setAttribute('class', 'btn');
+//   button.innerHTML = 'X';
+//   list.append(button);
+//   button.onclick = function (){
+//     document.getElementById('hotels-list').removeChild(list);
+//   };
+//   fetch('/api/hotels/' + select.value)
+//   .then(response => {
+//     return response.json()})
+//   .then(result => {
+//     console.log(result);
+//     buildMarker('hotels', result).addTo(map)})
+//   .catch()
 
-document.getElementById(`hotels-add`).addEventListener('click',
-function() {
-  let select = document.getElementById('hotels-choices')
-  let list = document.createElement("LI");
-  list.innerText = select.value;
-  document.getElementById('hotels-list').appendChild(list);
-  const button = document.createElement('button');
-  button.setAttribute('class', 'btn');
-  button.innerHTML = 'X';
-  list.append(button);
-  button.onclick = function (){
-    document.getElementById('hotels-list').removeChild(list);
-  };
-})
+// })
+
+// buildMarker('hotel', result.location).addTo(map)
 
 document.getElementById(`restaurants-add`).addEventListener('click',
 function() {
@@ -690,6 +788,5 @@ module.exports = { fetchActivities, fetchHotels, fetchRestaurants }
 
 
 /***/ })
-
-/******/ });
+/******/ ]);
 //# sourceMappingURL=bundle.js.map

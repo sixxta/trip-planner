@@ -1,17 +1,17 @@
 const express = require('express');
 const router = express.Router();
-const { Activity, Hotel, Restaurant } = require('./models')
+const { Activity, Hotel, Restaurant, Place } = require('./models')
 
-router.get('/activities', function(req, res){
-  Activity.findAll({}).then(result => res.json(result));
-});
+const activityTypes = { activities: Activity, hotels: Hotel, restaurants: Restaurant}
 
-router.get('/hotels', function(req, res){
-  Hotel.findAll({}).then(result => res.json(result));
-});
+router.get('/:activityType', function(req, res){
+  activityTypes[req.params.activityType].findAll({}).then(result => res.json(result));
+})
 
-router.get('/restaurants', function(req, res){
-  Restaurant.findAll({}).then(result => res.json(result));
-});
+router.get('/:activityType/:name', function(req, res){
+  activityTypes[req.params.activityType]
+  .findOne({where: {name: req.params.name}, include: [Place]})
+  .then(result => res.json(result.dataValues.place.location));
+})
 
 module.exports = router;
